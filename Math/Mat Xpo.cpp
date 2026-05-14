@@ -1,34 +1,33 @@
-struct Mat{
- int n,m;
- vector<vector<int>> a;
- Mat(){}
- Mat(int _n,int _m){n=_n;m=_m;a.assign(n,vector<int>(m,0));}
- Mat(vector<vector<int>> v){n=v.size();m=n?v[0].size():0;a=v;}
- inline void make_unit(){assert(n==m);for(int i=0;i<n;i++)for(int j=0;j<n;j++)a[i][j]=(i==j);}
- inline Mat operator+(const Mat&b){
-  assert(n==b.n&&m==b.m);Mat r(n,m);
-  for(int i=0;i<n;i++)for(int j=0;j<m;j++)r.a[i][j]=(a[i][j]+b.a[i][j])%mod;
-  return r;
- }
- inline Mat operator-(const Mat&b){
-  assert(n==b.n&&m==b.m);Mat r(n,m);
-  for(int i=0;i<n;i++)for(int j=0;j<m;j++)r.a[i][j]=(a[i][j]-b.a[i][j]+mod)%mod;
-  return r;
- }
- inline Mat operator*(const Mat&b){
-  assert(m==b.n);Mat r(n,b.m);
-  for(int i=0;i<n;i++)for(int j=0;j<b.m;j++)for(int k=0;k<m;k++)
-   r.a[i][j]=(r.a[i][j]+1LL*a[i][k]*b.a[k][j]%mod)%mod;
-  return r;
- }
- inline Mat fow(int64_t k){
-  assert(n==m);Mat r(n,m),b=*this;r.make_unit();
-  while(k){if(k&1)r=r*b;b=b*b;k>>=1LL;}
-  return r;
- }
- inline Mat& operator+=(const Mat&b){return *this=(*this)+b;}
- inline Mat& operator-=(const Mat&b){return *this=(*this)-b;}
- inline Mat& operator*=(const Mat&b){return *this=(*this)*b;}
- inline bool operator==(const Mat&b){return a==b.a;}
- inline bool operator!=(const Mat&b){return a!=b.a;}
-};
+#include<bits/stdc++.h>
+using namespace std;
+const int mod=1e9+7;
+vector<vector<int>> mul(vector<vector<int>> &a,vector<vector<int>> &b)
+{
+	int n=a.size(),m=b[0].size();
+	vector<vector<int>> c(n,vector<int>(m,0));
+	
+	for(int i=0;i<a.size();i++)
+	{
+		for(int j=0;j<m;j++)
+		{
+			for(int k=0;k<a[0].size();k++)
+				c[i][j]=(c[i][j]+(1ll*a[i][k]*b[k][j])%mod)%mod;
+		}
+	}
+	return c;
+}
+vector<vector<int>> bp(vector<vector<int>> &a,long b)
+{
+	vector<vector<int>> res(a.size(),vector<int> (a[0].size(),0));
+	for(int i=0;i<a.size();i++)
+		res[i][i] = 1;		// transpose matrix
+	while(b)
+	{
+		if(b & 1){
+			res=mul(res,a);
+		}
+		a=mul(a,a);
+		b >>= 1;
+	}
+	return res;
+}

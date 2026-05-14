@@ -13,9 +13,29 @@ void findBridge(int node, int parentNode, vector<int> adj[]){
         if(tin[node] < low[it])bridge.push_back({node, it});
     }
 }
+void dfsToSetRnk(int node, int par, int rnk, vector<int> adj[]){
+
+	nodeToRnk[node] = rnk;
+	rnkToNode[rnk] = node;
+	vis[node] = 1;
+	for(auto it: adj[node]){
+		if(it == par)continue;
+
+		if(bridge[{node, it}]){
+			if(!vis[it])q.push(it);
+		}
+		else{
+			if(!vis[it]){
+				dfsToSetRnk(it, node, rnk, adj);
+			}
+		}
+	}
+}
 low = vector<int>(n + 1, 0);
 tin = vector<int>(n + 1, 0);
 vis = vector<int> (n + 1, 0);
+nodeToRnk = vector<int> (n + 1, 0);
+rnkToNode = vector<int> (n + 1, 0);
 vector<int> adj[n + 1];
 bridge.clear();
 timer = 1;

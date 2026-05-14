@@ -17,16 +17,20 @@ void solve()
     for(int i = 0; i < q; i++){
         int l = qry[i].first.first, r = qry[i].first.second, ind = qry[i].second;
         while(rg <= r){
+            // ...
             rg++;
         }
         while(rg > r + 1){
             rg--;
+            // ...
         }
         while(lf < l){
+            // ...
             lf++;
         }
         while(lf >= l + 1){
             lf--;
+            // ...
         }
         ansVec[ind] = ans...;
     }

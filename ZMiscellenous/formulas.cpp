@@ -3,11 +3,11 @@ Sum of n natural squared numbers = n * (n + 1) * (2 * n + 1) / 6;
 Sum of n natural cube numbers = (n * (n + 1) / 2)^2;
 Sum of first n even numbers = n * (n + 1)
 Sum of first n odd numbers = n ^ 2;
-Chord Length = 2 * √(r² - d²)
-area of a sector/arc = (θ/360) * πr² (θ is in degree)
-area of a sector/arc = (1/2) * θ * r² (θ is in radians)
+Chord Length = 2 * sqrt(r^2 - d^2)
+area of a sector/arc = (θ/360) * πr^2 (θ is in degree)
+area of a sector/arc = (1/2) * θ * r^2 (θ is in radians)
 sine rule a/sin A = b/sin B = c/sin C
-cosine rule c² = a² + b² - 2ab cos C
+cosine rule c^2 = a^2 + b^2 - 2ab cos C
 sum of angles of a polygon (n - 2) * 180
 Catalen numbers Cn = (1 / (n + 1)) * (2n  n) = (2n  n) - (2n   (n + 1)) = sumOf i to n (Ci * C(n-i))
 Area of isoceles = .5 * a * b * sin(c)

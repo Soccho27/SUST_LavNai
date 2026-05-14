@@ -1,55 +1,57 @@
-class segTree{
-public:
-    int sz;
-    vector<int> t,lazy;
-    segTree(){}
-    segTree(int l){
-        sz=l;
-        if(__builtin_popcount(sz)!=1){
-            int x=31-__builtin_clz(sz);
-            sz=(1LL<<(x+1));
-        }
-        t.assign(2*sz+1,0);
-        lazy.assign(2*sz+1,0);
+const int N = 5e5 + 9;
+int a[N];
+struct ST {
+  #define lc (n << 1)
+  #define rc ((n << 1) | 1)
+  long long t[4 * N], lazy[4 * N];
+  ST() {
+    memset(t, 0, sizeof t);
+    memset(lazy, 0, sizeof lazy);
+  }
+  inline void push(int n, int b, int e) {
+    if (lazy[n] == 0) return;
+    t[n] = t[n] + lazy[n] * (e - b + 1);
+    if (b != e) {
+      lazy[lc] = lazy[lc] + lazy[n];
+      lazy[rc] = lazy[rc] + lazy[n];
     }
-    void apply(int root, int tl, int tr){
-        if(!lazy[root])     return;
-        t[root]+=lazy[root];
-        if(tl!=tr){
-            lazy[root*2]+=lazy[root];
-            lazy[root*2+1]+=lazy[root];
-        }
-        lazy[root]=0;
+    lazy[n] = 0;
+  }
+  inline long long combine(long long a,long long b) {
+    return a + b;
+  }
+  inline void pull(int n) {
+    t[n] = t[lc] + t[rc];
+  }
+  void build(int n, int b, int e) {
+    lazy[n] = 0;
+    if (b == e) {
+      t[n] = a[b];
+      return;
     }
-    int combine(int& left, int& right){
-        int tm=left+right; return tm;
+    int mid = (b + e) >> 1;
+    build(lc, b, mid);
+    build(rc, mid + 1, e);
+    pull(n);
+  }
+  void upd(int n, int b, int e, int i, int j, long long v) {
+    push(n, b, e);
+    if (j < b || e < i) return;
+    if (i <= b && e <= j) {
+      lazy[n] = v; //set lazy
+      push(n, b, e);
+      return;
     }
-    void update(int root, int tl, int tr, int l, int r, int x){
-        apply(root,tl,tr);
-        if(l>tr || r<tl)        return;
-        if(l<=tl && r>=tr){
-            lazy[root]+=x;
-            apply(root,tl,tr);
-            return;
-        }
-        int mid=(tl+tr)/2;
-        update(root*2,tl,mid,l,r,x);
-        update(root*2+1,mid+1,tr,l,r,x);
-        t[root]=combine(t[root*2],t[root*2+1]);
-    }
-    int query(int root,  int tl, int tr, int l, int r){
-        apply(root,tl,tr);
-        if(l>tr || r<tl)    return 0;
-        if(l<=tl && r>=tr)  return t[root];
-        int mid=(tl+tr)/2;
-        auto q1=query(root*2,tl,mid,l,r);
-        auto q2=query(root*2+1,mid+1,tr,l,r);
-        return combine(q1,q2);
-    }
-    void update(int l, int r, int x){
-        update(1,0,sz-1,l,r,x);
-    }   
-    int query(int l, int r){
-        return query(1,0,sz-1,l,r);
-    }
+    int mid = (b + e) >> 1;
+    upd(lc, b, mid, i, j, v);
+    upd(rc, mid + 1, e, i, j, v);
+    pull(n);
+  }
+  long long query(int n, int b, int e, int i, int j) {
+    push(n, b, e);
+    if (i > e || b > j) return 0; //return null
+    if (i <= b && e <= j) return t[n];
+    int mid = (b + e) >> 1;
+    return combine(query(lc, b, mid, i, j), query(rc, mid + 1, e, i, j));
+  }
 };
