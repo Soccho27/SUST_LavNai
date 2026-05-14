@@ -1,8 +1,14 @@
-
-vector<int> prefix_function(string s){
-  int n = (int)s.length(); vector<int> pi(n);
-  for(int i = 1; i < n; i++) {
-    int j = pi[i-1];
-    while(j>0 && s[i] != s[j]) j = pi[j-1];
-    if(s[i] == s[j]) j++;
-    pi[i] = j; }  return pi;  }
+void genLPS(){
+    vector<int> lps(n,0);
+    int i=1,len=0;
+    // here i=1 because we want only the proper suffix
+    while(i<s.size()){
+        if(s[i]==s[len]){
+            len++;
+            lps[i]=len;
+            i++;
+        }
+        else{
+            if(len>0)len=lps[len-1];
+            else i++;
+}}}
